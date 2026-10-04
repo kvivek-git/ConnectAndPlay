@@ -8,12 +8,14 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@Getter
+@Setter
 public class Plan {
     private static final Logger logger = Logger.getLogger(Plan.class.getName());
     private final int ID;
-    @Getter
     private final String title;
     private final int capacity;
     private final Set<User> booked_users = new HashSet<>();
@@ -32,6 +34,9 @@ public class Plan {
         }
         if(notifier == null) {
             throw new IllegalArgumentException("notifier cannot be null");
+        }
+        if(title == null || title.isBlank()) {
+            throw new IllegalArgumentException("Title cannot be null or empty");
         }
         this.ID = id;
         this.title = title;
@@ -80,7 +85,7 @@ public class Plan {
                     notifier.notifyPromotion(next_user, this);
                 } catch(NotificationException e){
                     logger.log(
-                            java.util.logging.Level.WARNING,
+                            Level.WARNING,
                             "Failed to notify user but Promotion succeeded: " + next_user.getName() + " for Plan: " + this.title,
                             e
                             );
